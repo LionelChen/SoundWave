@@ -2,16 +2,44 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+// Detailed wav format standard: http://soundfile.sapp.org/doc/WaveFormat/
+
 @SuppressWarnings("unused")
 public class WaveFileReader {
+
+    // start of Wav file constants
+    static public int LEN_RIFF_FILE_DESCRIPTION_HEADER = 4;
+    static public int LEN_SIZE_OF_FILE = 4;
+    static public int LEN_WAV_DESCRIPTION_HEADER = 4;
+    static public int LEN_FMT_DESCRIPTION_HEADER = 4;
+    static public int LEN_WAV_SECTION_CHUNK = 4;
+    static public int LEN_WAV_TYPE_FORMAT = 2;
+    static public int LEN_MONO_STEREO_FLAG = 2;
+    static public int LEN_SAMPLE_FREQUENCY = 4;
+    static public int LEN_BYTES_PER_SEC = 4;
+    static public int LEN_BLOCK_ALIGNMENT = 2;
+    static public int LEN_BITS_PER_SAMPLE = 2;
+    static public int LEN_DATA_DESCRIPTION_HEADER = 4;
+    static public int LEN_SIZE_OF_DATA_CHUNK = 4;
+
+    public static String RIFF_FILE_DESCRIPTION_HEADER = "RIFF";
+    public static String WAV_DESCRIPTION_FLAG = "WAVE";
+    public static String FMT_DESCRIPTION_HEADER = "fmt ";
+    public static String DATA_DESCRIPTION_HEADER = "data";
+    // End of Wav file constants
+
     private String filename = null;
     private int[][] data = null;
 
     private int len = 0;
 
+    //Contains the letters "RIFF" in ASCII form
     private String chunkdescriptor;
+    //Size of chunk 1
     private long chunksize;
+    //Contains the letters "WAVE"
     private String waveflag;
+
     private String fmtsubchunk;
     private long subchunk1size;
     private int audioformat;
@@ -84,16 +112,16 @@ public class WaveFileReader {
             fis = new FileInputStream(this.filename);
             bis = new BufferedInputStream(fis);
 
-            this.chunkdescriptor = readString(WaveConstants.LEN_RIFF_FILE_DESCRIPTION_HEADER);
+            this.chunkdescriptor = readString(LEN_RIFF_FILE_DESCRIPTION_HEADER);
             if (!chunkdescriptor.endsWith("RIFF"))
                 throw new IllegalArgumentException("RIFF miss, " + filename + " is not a wave file.");
 
             this.chunksize = readLong();
-            this.waveflag = readString(WaveConstants.LEN_WAV_DESCRIPTION_HEADER);
+            this.waveflag = readString(LEN_WAV_DESCRIPTION_HEADER);
             if (!waveflag.endsWith("WAVE"))
                 throw new IllegalArgumentException("WAVE miss, " + filename + " is not a wave file.");
 
-            this.fmtsubchunk = readString(WaveConstants.LEN_FMT_DESCRIPTION_HEADER);
+            this.fmtsubchunk = readString(LEN_FMT_DESCRIPTION_HEADER);
             if (!fmtsubchunk.endsWith("fmt "))
                 throw new IllegalArgumentException("fmt miss, " + filename + " is not a wave file.");
 
@@ -105,7 +133,7 @@ public class WaveFileReader {
             this.blockalign = readInt();
             this.bitspersample = readInt();
 
-            this.datasubchunk = readString(WaveConstants.LEN_DATA_DESCRIPTION_HEADER);
+            this.datasubchunk = readString(LEN_DATA_DESCRIPTION_HEADER);
             if (!datasubchunk.endsWith("data"))
                 throw new IllegalArgumentException("data miss, " + filename + " is not a wave file.");
             this.subchunk2size = readLong();
