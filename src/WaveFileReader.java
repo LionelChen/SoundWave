@@ -39,7 +39,6 @@ public class WaveFileReader {
     private long chunksize;
     //Contains the letters "WAVE"
     private String waveflag;
-
     private String fmtsubchunk;
     private long subchunk1size;
     private int audioformat;
@@ -74,33 +73,33 @@ public class WaveFileReader {
         return null;
     }
 
-    // 判断是否创建wav读取器成功
+    // check if successfully read wav file
     public boolean isSuccess() {
         return issuccess;
     }
 
-    // 获取每个采样的编码长度，8bit或者16bit
+    // git bit per sample, it's either 8 bits or 18 bits
     public int getBitPerSample() {
         return this.bitspersample;
     }
 
-    // 获取采样率
+    // get sample rate, should be an even number (between 0 and 35565?)
     public long getSampleRate() {
         return this.samplerate;
     }
 
+    // get channel numbers, 1 for mono, 2 for stereo
     // 获取声道个数，1代表单声道 2代表立体声
     public int getNumChannels() {
         return this.numchannels;
     }
 
-    // 获取数据长度，也就是一共采样多少个
+    // get data length, the total sample points number
     public int getDataLen() {
         return this.len;
     }
 
-    // 获取数据
-    // 数据是一个二维数组，[n][m]代表第n个声道的第m个采样值
+    // get frequency data, can be used directly to plot the waveform
     public int[][] getData() {
         return this.data;
     }
@@ -172,7 +171,7 @@ public class WaveFileReader {
         byte[] buf = new byte[len];
         try {
             if (bis.read(buf) != len)
-                throw new IOException("no more data!!!");
+                throw new IOException("no more data");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -184,7 +183,7 @@ public class WaveFileReader {
         int res = 0;
         try {
             if (bis.read(buf) != 2)
-                throw new IOException("no more data!!!");
+                throw new IOException("no more data");
             res = (buf[0] & 0x000000FF) | (((int) buf[1]) << 8);
         } catch (IOException e) {
             e.printStackTrace();
@@ -199,7 +198,7 @@ public class WaveFileReader {
             for (int i = 0; i < 4; ++i) {
                 l[i] = bis.read();
                 if (l[i] == -1) {
-                    throw new IOException("no more data!!!");
+                    throw new IOException("no more data");
                 }
             }
             res = l[0] | (l[1] << 8) | (l[2] << 16) | (l[3] << 24);
@@ -213,7 +212,7 @@ public class WaveFileReader {
         byte[] buf = new byte[len];
         try {
             if (bis.read(buf) != len)
-                throw new IOException("no more data!!!");
+                throw new IOException("no more data");
         } catch (IOException e) {
             e.printStackTrace();
         }

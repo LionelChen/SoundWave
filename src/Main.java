@@ -34,8 +34,11 @@ public class Main {
             }
             Plot.hold_off();*/
 
+            int[][] raw_data = reader.getData();
             int[] data = reader.getData()[0];
-            XYLineChart_AWT chart = new XYLineChart_AWT(filename + "; Sample Rate: " +reader.getSampleRate() + "; BitsPerSample: " + reader.getBitPerSample() + "; # of Channel: " +reader.getNumChannels(), "Waveform", data);
+            XYLineChart_AWT chart = new XYLineChart_AWT(
+                    filename + "; Sample Rate: " +reader.getSampleRate() + "; BitsPerSample: " + reader.getBitPerSample() + "; # of Channel: " +reader.getNumChannels(),
+                    "Waveform", data);
             chart.pack( );
             RefineryUtilities.centerFrameOnScreen( chart );
             chart.setVisible( true );
