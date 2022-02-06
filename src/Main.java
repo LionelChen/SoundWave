@@ -1,6 +1,8 @@
 import javax.swing.*;
 import com.sin.java.plot.Plot;
 import com.sin.java.plot.PlotFrame;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.ui.RefineryUtilities;
 
 public class Main {
     // int 数组 转换到 double数组
@@ -19,18 +21,29 @@ public class Main {
         //
         String[] pamss = new String[] { "-r", "-g", "-b" };
         if (reader.isSuccess()) {
-            PlotFrame frame = Plot.figrue(String.format("%s %dHZ %dBit %dCH", filename, reader.getSampleRate(), reader.getBitPerSample(), reader.getNumChannels()));
+
+/*            PlotFrame frame = Plot.figrue(String.format("%s %dHZ %dBit %dCH", filename, reader.getSampleRate(), reader.getBitPerSample(), reader.getNumChannels()));
             frame.setSize(500, 200);
             Plot.hold_on();
+
             for (int i = 0; i < reader.getNumChannels(); ++i) {
                 // 获取i声道数据
                 int[] data = reader.getData()[i];
                 // 绘图
                 Plot.plot(Integers2Doubles(data), pamss[i % pamss.length]);
             }
-            Plot.hold_off();
+            Plot.hold_off();*/
+
+            int[] data = reader.getData()[0];
+            XYLineChart_AWT chart = new XYLineChart_AWT(filename + "; Sample Rate: " +reader.getSampleRate() + "; BitsPerSample: " + reader.getBitPerSample() + "; # of Channel: " +reader.getNumChannels(), "Waveform", data);
+            chart.pack( );
+            RefineryUtilities.centerFrameOnScreen( chart );
+            chart.setVisible( true );
+
+
+
         } else {
-            System.err.println(filename + "不是一个正常的wav文件");
+            System.err.println(filename + " might not be a valid wav file");
         }
     }
 
