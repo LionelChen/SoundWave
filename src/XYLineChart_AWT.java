@@ -34,7 +34,17 @@ public class XYLineChart_AWT extends ApplicationFrame {
                 PlotOrientation.VERTICAL ,
                 true , true , false);
 
+        JFreeChart xylineChart1 = ChartFactory.createXYLineChart(
+                chartTitle ,
+                "" ,
+                "" ,
+                dataset ,
+                PlotOrientation.VERTICAL ,
+                true , true , false);
+
+
         ChartPanel chartPanel = new ChartPanel( xylineChart );
+        ChartPanel chartPanel1 = new ChartPanel(xylineChart1);
         chartPanel.setPreferredSize( new java.awt.Dimension( 560 , 367 ) );
         final XYPlot plot = xylineChart.getXYPlot( );
 
@@ -50,7 +60,10 @@ public class XYLineChart_AWT extends ApplicationFrame {
         //renderer.setSeriesStroke( 1 , new BasicStroke( 3.0f ) );
         //renderer.setSeriesStroke( 2 , new BasicStroke( 2.0f ) );
         plot.setRenderer( renderer );
-        setContentPane( chartPanel );
+        getContentPane().add(chartPanel);
+        //setContentPane( chartPanel );
+        getContentPane().add(chartPanel1);
+        pack();
     }
 
     private XYDataset createDataset( ) {

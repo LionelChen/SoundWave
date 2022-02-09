@@ -1,8 +1,15 @@
 import javax.swing.*;
 import com.sin.java.plot.Plot;
 import com.sin.java.plot.PlotFrame;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RefineryUtilities;
+import org.jfree.chart.plot.PlotOrientation;
+
+import java.awt.*;
 
 public class Main {
     // int 数组 转换到 double数组
@@ -36,12 +43,54 @@ public class Main {
 
             int[][] raw_data = reader.getData();
             int[] data = reader.getData()[0];
-            XYLineChart_AWT chart = new XYLineChart_AWT(
+/*            XYLineChart_AWT chart1 = new XYLineChart_AWT(
                     filename + "; Sample Rate: " +reader.getSampleRate() + "; BitsPerSample: " + reader.getBitPerSample() + "; # of Channel: " +reader.getNumChannels(),
-                    "Waveform", data);
-            chart.pack( );
-            RefineryUtilities.centerFrameOnScreen( chart );
-            chart.setVisible( true );
+                    "Waveform", raw_data[0]);
+
+            chart1.pack();
+            RefineryUtilities.centerFrameOnScreen( chart1 );
+            chart1.setVisible( true );*/
+
+            JFrame frame = new JFrame( filename + "; Sample Rate: " +reader.getSampleRate() + "; BitsPerSample: " + reader.getBitPerSample() + "Waveform");
+            frame.setLayout( new FlowLayout() );
+
+            final XYSeriesCollection dataset0 = new XYSeriesCollection();
+            final XYSeries channel_0 = new XYSeries( "Channel_0" );
+            for(int i = 0; i<raw_data[0].length; i++){
+                channel_0.add(i, raw_data[0][i]);
+            }
+            dataset0.addSeries( channel_0 );
+
+            JFreeChart xyChart1 =
+                    ChartFactory.createXYLineChart("Channel_0","", "", dataset0,
+                            PlotOrientation.VERTICAL, true, true, false);
+
+            ChartPanel chartPanel1 = new ChartPanel( xyChart1 );
+            chartPanel1.setPreferredSize( new java.awt.Dimension( 560 , 367 ) );
+
+            frame.getContentPane().add(chartPanel1);
+
+
+            final XYSeriesCollection dataset1 = new XYSeriesCollection();
+            final XYSeries channel_1 = new XYSeries( "Channel_0" );
+            for(int i = 0; i<raw_data[1].length; i++){
+                channel_1.add(i, raw_data[1][i]);
+            }
+            dataset1.addSeries( channel_1 );
+
+            JFreeChart xyChart2 =
+                    ChartFactory.createXYLineChart("Channel_1","", "", dataset1,
+                            PlotOrientation.VERTICAL, true, true, false);
+
+            ChartPanel chartPanel2 = new ChartPanel( xyChart2 );
+            chartPanel2.setPreferredSize( new java.awt.Dimension( 560 , 367 ) );
+
+            frame.getContentPane().add(chartPanel2);
+
+
+            frame.pack();
+
+            frame.setVisible(true);
 
 
 
